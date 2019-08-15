@@ -1,0 +1,93 @@
+########################docker常用命令#########################
+#拉取、查看及删除镜像
+docker pull 镜像
+docker images
+docker rmi -f 镜像
+
+#提交镜像
+docker commit -m "说明" 镜像 镜像名:tag
+
+#导出、导入容器
+docker export 容器  > ubuntu-fore-end:latest.tar
+cat 文件名 | docker import - jsxzswz/ubuntu-fore-end:latest
+
+#运行镜像
+docker run -t -d -p 8080:8080/tcp --name ubuntu_dev -v /home/swz/docker/volums:/web 镜像 
+       后台运行 本地8080端口   容器8080端口  自定义容器名称     挂载本地      容器 /web 路径
+
+#停止删除容器
+docker stop 容器
+docker rm -f 容器
+
+#进入、删除容器
+docker exec -it 容器 /bin/bash
+
+#给镜像加标签（修改）
+# docker tag 镜像  用户/镜像:TAG
+
+#上传镜像
+sudo docker login
+docker push 用户/镜像:TAG
+
+########################docker创建前端开发环境#########################
+##使用Dockerfile创建镜像##
+docker build --build-arg HTTP_PROXY=http://10.1.27.102:8080 -t jsxzswz/ubuntu-fore-end:latest .
+
+#拉取ubuntu16.04镜像
+docker pull ubuntu:16.04
+
+#运行ubuntu镜像
+docker run -t -d 镜像
+
+#设置代理网络
+echo -e "\nexport http_proxy=http://10.1.27.102:8080\nexport https_proxy=http://10.1.27.102:8080" >> ~/.bashrc
+(须重启终端)
+
+#换源
+sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+apt-get update
+
+#安装linux基本软件vim、curl、net-tools、bash-completion 
+apt-get install vim curl net-tools bash-completion
+
+#安装npm、git并设置代理
+apt-get install npm
+npm config set https-proxy http://10.1.27.102:8080
+apt-get install git
+git config --global http.proxy 10.1.27.102:8080     
+
+#安装cnpm、nodejs、Vue-cli 
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+curl -sL https://deb.nodesource.com/setup_8.x | bash -
+apt-get install -y nodejs
+ln -s /usr/bin/nodejs /usr/bin/node
+npm install --global vue-cli
+
+#安装nginx
+apt-get install nginx
+
+########################docker创建后端开发环境#########################
+#拉取ubuntu16.04镜像
+docker pull ubuntu:16.04
+
+#运行ubuntu镜像
+docker run -t -d 镜像
+
+#设置代理网络
+echo -e "\nexport http_proxy=http://10.1.27.102:8080\nexport https_proxy=http://10.1.27.102:8080" >> ~/.bashrc
+(须重启终端)
+
+#换源
+sed -i 's/archive.ubuntu.com/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
+apt-get update
+
+#安装linux基本软件vim、curl、net-tools、bash-completion 
+apt-get install vim curl net-tools bash-completion
+
+#安装java8
+
+#安装mysql
+
+#安装tomcat
+
+#安装maven
